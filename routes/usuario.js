@@ -2,10 +2,12 @@ const express = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const {verificarToken, verificarRol} = require('../middlewares/autenticacion');
 
 const app = express();
 
-app.get('/usuario', function (req, res) {
+//El segundo parametro es el middleware, se pasa la function, sin parentesis
+app.get('/usuario', verificarToken, (req, res) => {
 
   let desde = Number(req.query.desde) || 0;
   let limite = Number(req.query.limite) || 5;
@@ -25,7 +27,7 @@ app.get('/usuario', function (req, res) {
       }
 
       //Count: mismos filtros del find
-      Usuario.count({estado:true}, (err, conteo) => {
+      Usuario.countDocuments({estado:true}, (err, conteo) => {
         res.json({
           ok: true,
           usuarios,
@@ -35,7 +37,7 @@ app.get('/usuario', function (req, res) {
     });
 });
 
-app.post('/usuario', function (req, res) {
+app.post('/usuario', [verificarToken, verificarRol], function (req, res) {
 
   let body = req.body;
 
@@ -65,7 +67,7 @@ app.post('/usuario', function (req, res) {
 
 });
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', verificarToken, function (req, res) {
 
   let id = req.params.id;
   //filtrado de campos permitidos con el underscore
@@ -86,7 +88,7 @@ app.put('/usuario/:id', function (req, res) {
 
 });
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id', [verificarToken, verificarRol], function (req, res) {
 
   let id = req.params.id;
 
