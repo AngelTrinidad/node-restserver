@@ -8,7 +8,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 process.env.SEED_AUT = process.env.SEED_AUT || 'este-es-el-seed-desarrollo';
 
 //Expiracion de token
-process.env.EXP_TOKEN = process.env.EXP_TOKEN || 60 * 60 * 24 * 30;
+process.env.EXP_TOKEN = process.env.EXP_TOKEN || '72h';
 
 //Base de datos
 let urlDB;

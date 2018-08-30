@@ -55,13 +55,12 @@ app.post('/login', (req, res) => {
 
 //Config de Google
 async function verify(token) {
-  
+
   const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
-      // Or, if multiple clients access the backend:
-      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+      audience: process.env.CLIENT_ID
   });
+
   const payload = ticket.getPayload();
 
   return {
@@ -75,13 +74,18 @@ async function verify(token) {
 app.post('/loginGoogle', async (req, res) => {
 
   let token = req.body.idtoken;
-  let googleUser = await verify(token)
-    .catch(e => {
-      return res.status(403).json({
-        ok: false,
-        err: e
-      });
+  let googleUser;
+
+  try{
+    googleUser = await verify(token);
+  }catch(err){
+    return res.status(403).json({
+      ok: false,
+      err: {
+        message: 'Token no válido'
+      }
     });
+  }
 
   Usuario.findOne({email: googleUser.email}, (err, usuarioDB) =>{
 

@@ -23,14 +23,21 @@ let verificarToken = (req, res, next) => {
 };
 
 let verificarRol = (req, res, next) => {
-  if(req.usuario !== 'ADMIN_ROLE'){
-    return res.status(401).json({
-      ok: false,
-      err: 'Rol no válido'
-    });
+
+  if(req.usuario){
+
+    if(req.usuario.role !== 'ADMIN_ROLE'){
+      
+      return res.status(401).json({
+        ok: false,
+        err: 'Rol no válido'
+      });
+    }
+
+    next();
+
   }
 
-  next();
 }
 
 module.exports = {verificarToken,verificarRol};

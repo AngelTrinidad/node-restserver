@@ -68,8 +68,10 @@ app.post('/usuario', [verificarToken, verificarRol], function (req, res) {
 });
 
 app.put('/usuario/:id', verificarToken, function (req, res) {
+  //Falta validacion de correo, en el caso de que envie el mismo correo que la base
 
   let id = req.params.id;
+
   //filtrado de campos permitidos con el underscore
   let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
