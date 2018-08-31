@@ -87,5 +87,4 @@ app.put('/producto/:id', verificarToken,(req, res) => {
 
 
 
-
 module.exports = app;
